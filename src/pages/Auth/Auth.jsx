@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import useForm from '../../hooks/useForm';
 import API from '../../services/api';
-import { useAuth } from '../../context/AuthContext';
 import DefultInput from '../../component/Forms/DefultInput';
 import Button from '../../component/Buttons/Button';
 import bgimage from '../../assets/Login.webp'
 import Toast from '../../component/Popups/Toast';
+import { useAuth } from '../../context/AuthContext';
 
 const Auth = () => {
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login } = useAuth()
 
     const [Loading, setLoading] = useState(false);
     const [successattempt, setsuccessattempt] = useState(false);
