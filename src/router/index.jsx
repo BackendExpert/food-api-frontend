@@ -9,22 +9,25 @@ import DashHome from '../pages/Dashboard/DashHome'
 import PrivateRoute from '../router/PrivateRoute'
 import Unauthorized from './Unauthorized'
 import Dashboard from '../layouts/Dashboard'
+import DashError from '../component/Error/DashError'
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<WebSite />} >
-                    <Route path='*' element={<DefultError /> } />
-                    <Route index element={<Auth /> } /> 
-                    <Route path='model' element={<ModelPopup /> } />
-                    <Route path='notifications' element={<Popups /> } />
-                    <Route path='unauthorized' element={<Unauthorized /> } />
+                    <Route path='*' element={<DefultError />} />
+                    <Route index element={<Auth />} />
+                    <Route path='model' element={<ModelPopup />} />
+                    <Route path='notifications' element={<Popups />} />
+                    <Route path='unauthorized' element={<Unauthorized />} />
                 </Route>
 
-                <Route path='/dashboard' element={<PrivateRoute roles={['admin', 'advisor', 'user']}><Dashboard /></PrivateRoute>}>
-                    <Route index element={<PrivateRoute roles={['admin', 'advisor', 'user']}><DashHome /></PrivateRoute>} />
-                </Route>    
+                <Route path='/dashboard' element={<PrivateRoute roles={['admin', 'developer', 'user']}><Dashboard /></PrivateRoute>}>
+                    <Route path='*' element={<PrivateRoute roles={['admin', 'developer', 'user']}><DashError /></PrivateRoute>} />
+                    <Route index element={<PrivateRoute roles={['admin', 'developer', 'user']}><DashHome /></PrivateRoute>} />
+                </Route>
+
             </Routes>
         </BrowserRouter>
     )

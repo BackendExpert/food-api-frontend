@@ -49,11 +49,11 @@ const DashSide = ({ closeSidebar }) => {
         },
 
         {
-            name: "Fodd API",
+            name: "Food API",
             icon: <FaPizzaSlice />,
             submenu: [
-                { name: "Create Recipe", link: '/food/create' },
-                { name: "Food Recipe", link: "/food/recipe" },
+                { name: "Create Recipe", link: '/dashboard/food/create' },
+                { name: "Food Recipe", link: "/dashboard/food/recipe" },
             ],
             roles: ["admin"],
         },
@@ -62,8 +62,8 @@ const DashSide = ({ closeSidebar }) => {
             name: "API",
             icon: <FaLink />,
             submenu: [
-                { name: "API Routes", link: '/api' },
-                { name: "API Usage Logs", link: "/api/usage" },
+                { name: "API Routes", link: '/dashboard/api' },
+                { name: "API Usage Logs", link: "/dashboard/api/usage" },
             ],
             roles: ["admin"],
         },
@@ -72,7 +72,7 @@ const DashSide = ({ closeSidebar }) => {
             name: "API Key",
             icon: <FaKey />,
             submenu: [
-                { name: "API Keys", link: '/keys' },
+                { name: "API Keys", link: '/dashboard/keys' },
             ],
             roles: ["admin"],
         },
@@ -81,8 +81,8 @@ const DashSide = ({ closeSidebar }) => {
             name: "Plans",
             icon: <FaFileInvoiceDollar />,
             submenu: [
-                { name: "View All Plans", link: '/plan' },
-                { name: "Create New Plan", link: '/plan/create' },
+                { name: "View All Plans", link: '/dashboard/plan' },
+                { name: "Create New Plan", link: '/dashboard/plan/create' },
             ],
             roles: ["admin"],
         },
@@ -92,7 +92,7 @@ const DashSide = ({ closeSidebar }) => {
             name: "Admin Panel",
             icon: <FaUsersCog />,
             submenu: [
-                { name: "Users", link: "/admin/users" },
+                { name: "Users", link: "/dashboard/admin/users" },
             ],
             roles: ["admin"],
         },
@@ -102,9 +102,9 @@ const DashSide = ({ closeSidebar }) => {
             name: "Settings",
             icon: <FaCog />,
             submenu: [
-                { name: "Profile", link: "/settings/profile" },
-                { name: "Preferences", link: "/settings/preferences" },
-                { name: "Privacy & Security", link: "/settings/security" },
+                { name: "Profile", link: "/dashboard/settings/profile" },
+                { name: "Preferences", link: "/dashboard/settings/preferences" },
+                { name: "Privacy & Security", link: "/dashboard/settings/security" },
             ],
             roles: ["user", "admin"],
         },
