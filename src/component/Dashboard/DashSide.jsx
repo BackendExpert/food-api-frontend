@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
 import defultImg from "../../assets/user.png";
-import uoplogo from "../../assets/logo.png";
+import foodlogo from "../../assets/FoodLogo1.png";
 import dashboardbg from "../../assets/siteimg.jpg";
 
 import API from "../../services/api";
@@ -13,37 +13,20 @@ import { useAuth } from "../../context/AuthContext";
 import "./DashSide.css";
 
 
-import { MdLogout, MdExplore, MdPlace, MdReviews, MdArticle } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 
 
-import { BiSolidDashboard, BiBarChartSquare } from "react-icons/bi";
+import { BiSolidDashboard } from "react-icons/bi";
 
 import {
     FaCog,
-    FaRobot,
     FaUsersCog,
-    FaMapMarkedAlt,
-    FaRoute,
-    FaMap,
-    FaCloudSun,
-    FaSuitcaseRolling,
-    FaMoneyBillWave,
-    FaUsers,
-    FaPlaneDeparture,
-    FaHotel,
-    FaUtensils,
-    FaStar,
-    FaBookmark,
-    FaHistory,
-    FaClipboardList,
+    FaKey,
+    FaFileInvoiceDollar,
+    FaPizzaSlice
 } from "react-icons/fa";
 
-
-import { GiPathDistance, GiWorld } from "react-icons/gi";
-
-
-import { IoMdAnalytics, IoMdTime } from "react-icons/io";
-
+import { FaLink } from 'react-icons/fa6'
 
 
 const DashSide = ({ closeSidebar }) => {
@@ -62,122 +45,46 @@ const DashSide = ({ closeSidebar }) => {
             name: "Dashboard",
             icon: <BiSolidDashboard />,
             link: "/dashboard",
-            roles: ["user", "admin"],
+            roles: ["admin"],
         },
 
-        /* ===================== DISCOVER ===================== */
         {
-            name: "Discover Places",
-            icon: <FaMapMarkedAlt />,
+            name: "Fodd API",
+            icon: <FaPizzaSlice />,
             submenu: [
-                { name: "Best Places", link: "/discover/best" },            // Foursquare + OSM
-                { name: "Nearby Places", link: "/discover/nearby" },        // OSM + Overpass
-                { name: "Top Attractions", link: "/discover/attractions" },
-                { name: "Food & Cafes", link: "/discover/food" },
-                { name: "Hotels & Stays", link: "/discover/stays" },
+                { name: "API Routes", link: '/api' },
+                { name: "API Usage Logs", link: "/api/usage" },
             ],
-            roles: ["user", "admin"],
+            roles: ["admin"],
         },
 
-        /* ===================== TRIP PLANNER ===================== */
         {
-            name: "Trip Planner",
-            icon: <FaRoute />,
+            name: "API",
+            icon: <FaLink />,
             submenu: [
-                { name: "Create Trip", link: "/trips/create" },
-                { name: "My Trips", link: "/trips" },
-
-                { name: "Short Trips (1 Day)", link: "/trips/type/short" },
-                { name: "Mid Trips (2–5 Days)", link: "/trips/type/mid" },
-                { name: "Long Trips (15+ Days)", link: "/trips/type/long" },
-
-                { name: "AI Trip Generator", link: "/trips/ai" }, // Gemini AI
+                { name: "API Routes", link: '/api' },
+                { name: "API Usage Logs", link: "/api/usage" },
             ],
-            roles: ["user", "admin"],
+            roles: ["admin"],
         },
 
-        /* ===================== ROUTES & MAPS ===================== */
         {
-            name: "Routes & Maps",
-            icon: <FaMap />,
+            name: "API Key",
+            icon: <FaKey />,
             submenu: [
-                { name: "Route Planner", link: "/routes/plan" },       // OSRM
-                { name: "Distance & Time", link: "/routes/estimate" },
-                { name: "Offline Maps", link: "/maps/offline" },
+                { name: "API Keys", link: '/keys' },
             ],
-            roles: ["user", "admin"],
+            roles: ["admin"],
         },
 
-        /* ===================== WEATHER ===================== */
         {
-            name: "Weather",
-            icon: <FaCloudSun />,
+            name: "Plans",
+            icon: <FaFileInvoiceDollar />,
             submenu: [
-                { name: "Live Weather", link: "/weather/live" },      // OpenWeather
-                { name: "Trip Forecast", link: "/weather/trip" },
-                { name: "Best Time to Visit", link: "/weather/best-time" },
+                { name: "View All Plans", link: '/plan' },
+                { name: "Create New Plan", link: '/plan/create' },
             ],
-            roles: ["user", "admin"],
-        },
-
-        /* ===================== BOOKINGS (OPTIONAL) ===================== */
-        {
-            name: "Bookings",
-            icon: <FaSuitcaseRolling />,
-            submenu: [
-                { name: "Saved Hotels", link: "/bookings/hotels" },
-                { name: "Saved Places", link: "/bookings/places" },
-                { name: "Travel Checklist", link: "/bookings/checklist" },
-            ],
-            roles: ["user", "admin"],
-        },
-
-        /* ===================== EXPENSES ===================== */
-        {
-            name: "Budget & Expenses",
-            icon: <FaMoneyBillWave />,
-            submenu: [
-                { name: "Trip Budget", link: "/expenses/budget" },
-                { name: "Expense Tracker", link: "/expenses/tracker" },
-                { name: "Cost Breakdown", link: "/expenses/report" },
-            ],
-            roles: ["user", "admin"],
-        },
-
-        /* ===================== AI ASSISTANT ===================== */
-        {
-            name: "AI Assistant",
-            icon: <FaRobot />,
-            submenu: [
-                { name: "Ask Travel AI", link: "/ai/chat" },
-                { name: "Smart Itinerary", link: "/ai/itinerary" },
-                { name: "Place Suggestions", link: "/ai/places" },
-            ],
-            roles: ["user", "admin"],
-        },
-
-        /* ===================== COMMUNITY ===================== */
-        {
-            name: "Community",
-            icon: <FaUsers />,
-            submenu: [
-                { name: "Travel Stories", link: "/community/stories" },
-                { name: "Reviews & Ratings", link: "/community/reviews" },
-                { name: "Ask Travelers", link: "/community/questions" },
-            ],
-            roles: ["user", "admin"],
-        },
-
-        /* ===================== REPORTS ===================== */
-        {
-            name: "Reports",
-            icon: <BiBarChartSquare />,
-            submenu: [
-                { name: "Trip Summary", link: "/reports/trips" },
-                { name: "Travel History", link: "/reports/history" },
-                { name: "Visited Places Map", link: "/reports/map" },
-            ],
-            roles: ["user", "admin"],
+            roles: ["admin"],
         },
 
         /* ===================== ADMIN ===================== */
@@ -186,9 +93,6 @@ const DashSide = ({ closeSidebar }) => {
             icon: <FaUsersCog />,
             submenu: [
                 { name: "Users", link: "/admin/users" },
-                { name: "Places Moderation", link: "/admin/places" },
-                { name: "Trip Analytics", link: "/admin/analytics" },
-                { name: "API Usage Logs", link: "/admin/apis" },
             ],
             roles: ["admin"],
         },
@@ -242,18 +146,18 @@ const DashSide = ({ closeSidebar }) => {
                 {/* Logo */}
                 <div className="flex items-center pb-4 pt-5 sticky top-0 bg-gradient-to-b from-white to-white z-10">
                     <motion.img
-                        src={uoplogo}
+                        src={foodlogo}
                         alt="Logo"
-                        className="h-10 w-auto ml-4 bg-gradient-to-r from-emerald-400 to-cyan-400 p-2 rounded-lg"
+                        className="h-10 w-auto ml-4 bg-orange-500 p-2 rounded-lg"
                         whileHover={{ scale: 1.1, rotate: 3 }}
                     />
                     {!collapsed && (
                         <motion.h1
                             initial={{ opacity: 0, y: 5 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="ml-2 font-bold text-lg text-emerald-700"
+                            className="ml-2 font-bold text-lg text-orange-500"
                         >
-                            Travel Management
+                            Food API Dashboard
                         </motion.h1>
                     )}
                 </div>
@@ -271,8 +175,8 @@ const DashSide = ({ closeSidebar }) => {
                                     <button
                                         onClick={() => toggleSubmenu(index)}
                                         className={`group relative flex items-center justify-between w-full px-4 py-2 rounded-xl font-medium transition-all duration-300 ${openMenu === index
-                                            ? "text-emerald-600 bg-emerald-100 shadow-sm"
-                                            : "text-gray-600 hover:text-emerald-600 hover:bg-emerald-50"
+                                            ? "text-orange-600 bg-orange-100 shadow-sm"
+                                            : "text-gray-600 hover:text-orange-600 hover:bg-orange-50"
                                             }`}
                                     >
                                         <div className="flex items-center gap-3">
@@ -295,7 +199,7 @@ const DashSide = ({ closeSidebar }) => {
 
                                         {!collapsed && (
                                             openMenu === index ? (
-                                                <ChevronDown className="w-4 h-4 text-emerald-600" />
+                                                <ChevronDown className="w-4 h-4 text-orange-600" />
                                             ) : (
                                                 <ChevronRight className="w-4 h-4 text-gray-400" />
                                             )
@@ -316,8 +220,8 @@ const DashSide = ({ closeSidebar }) => {
                                                     onClick={closeSidebar}
                                                     className={({ isActive }) =>
                                                         `block px-3 py-1.5 rounded-lg text-sm transition-all duration-200 ${isActive
-                                                            ? "text-emerald-700 font-semibold"
-                                                            : "text-gray-500 hover:text-emerald-600"
+                                                            ? "text-orange-700 font-semibold"
+                                                            : "text-gray-500 hover:text-orange-600"
                                                         }`
                                                     }
                                                 >
@@ -333,8 +237,8 @@ const DashSide = ({ closeSidebar }) => {
                                     onClick={closeSidebar}
                                     className={({ isActive }) =>
                                         `group relative flex items-center gap-3 px-4 py-2 rounded-xl font-medium transition-all duration-300 ${isActive
-                                            ? "text-emerald-600"
-                                            : "text-gray-600 hover:text-emerald-600 hover:ml-1"
+                                            ? "text-orange-600"
+                                            : "text-gray-600 hover:text-orange-600 hover:ml-1"
                                         }`
                                     }
                                 >
@@ -372,7 +276,7 @@ const DashSide = ({ closeSidebar }) => {
 
                 {/* User Info */}
                 {!collapsed && (
-                    <div className="px-4 py-4 mt-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50 to-white">
+                    <div className="px-4 py-4 mt-4 border-t border-orange-100 bg-gradient-to-r from-orange-50 to-white">
                         <div className="flex items-center gap-3 mb-3">
                             <img
                                 src={
@@ -408,14 +312,14 @@ const DashSide = ({ closeSidebar }) => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="p-3 text-center text-[10px] text-emerald-500 border-t border-emerald-100"
+                    className="p-3 text-center text-[10px] text-orange-500 border-t border-orange-100"
                 >
                     {!collapsed && (
                         <>
-                            © {new Date().getFullYear()} CareerAI Helper
+                            © {new Date().getFullYear()} Food API - Dashboard
                             <br />
-                            <span className="font-semibold text-emerald-600">
-                                Empowering Smart Careers
+                            <span className="font-semibold text-orange-600">
+                                Food API
                             </span>
                         </>
                     )}
