@@ -52,8 +52,8 @@ const DashSide = ({ closeSidebar }) => {
             name: "Fodd API",
             icon: <FaPizzaSlice />,
             submenu: [
-                { name: "API Routes", link: '/api' },
-                { name: "API Usage Logs", link: "/api/usage" },
+                { name: "Create Recipe", link: '/food/create' },
+                { name: "Food Recipe", link: "/food/recipe" },
             ],
             roles: ["admin"],
         },
