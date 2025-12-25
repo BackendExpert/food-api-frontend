@@ -11,6 +11,8 @@ import Unauthorized from './Unauthorized'
 import Dashboard from '../layouts/Dashboard'
 import DashError from '../component/Error/DashError'
 import CreateRecipe from '../pages/Dashboard/Foods/CreateRecipe'
+import ManageFoodRecipes from '../pages/Dashboard/Foods/ManageFoodRecipes'
+import FoodRecipe from '../pages/Dashboard/Foods/FoodRecipe'
 
 function App() {
     return (
@@ -29,6 +31,8 @@ function App() {
                     <Route index element={<PrivateRoute roles={['admin', 'developer', 'user']}><DashHome /></PrivateRoute>} />
 
                     <Route path='food/create' element={<PrivateRoute roles={['admin', 'developer', 'user']}><CreateRecipe /></PrivateRoute>}  />
+                    <Route path='food/recipe' element={<PrivateRoute roles={['admin', 'developer', 'user']}><ManageFoodRecipes /></PrivateRoute>} />
+                    <Route path='food/one-recipe/:id' element={<PrivateRoute roles={['admin', 'developer', 'user']}><FoodRecipe /></PrivateRoute>} />
                 
                 </Route>
 
