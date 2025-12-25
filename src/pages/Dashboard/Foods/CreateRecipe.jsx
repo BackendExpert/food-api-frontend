@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../../component/Buttons/Button";
+import API from "../../../services/api";
 
 const categoryOptions = [
     { label: "Rice", value: "rice" },
@@ -31,246 +32,265 @@ const CreateRecipe = () => {
         const { name, value } = e.target;
         const keys = name.split(".");
         setValues((prev) => {
-            const newState = { ...prev };
-            let temp = newState;
-            keys.forEach((key, i) => {
-                if (i === keys.length - 1) temp[key] = value;
+            const copy = { ...prev };
+            let temp = copy;
+            keys.forEach((k, i) => {
+                if (i === keys.length - 1) temp[k] = value;
                 else {
-                    temp[key] = { ...temp[key] };
-                    temp = temp[key];
+                    temp[k] = { ...temp[k] };
+                    temp = temp[k];
                 }
             });
-            return newState;
+            return copy;
         });
     };
 
     const addIngredient = () =>
-        setValues((prev) => ({
-            ...prev,
-            ingredients: [...prev.ingredients, { name: "", quantity: "" }],
+        setValues((p) => ({
+            ...p,
+            ingredients: [...p.ingredients, { name: "", quantity: "" }],
         }));
 
-    const removeIngredient = (index) =>
-        setValues((prev) => ({
-            ...prev,
-            ingredients: prev.ingredients.filter((_, i) => i !== index),
+    const removeIngredient = (i) =>
+        setValues((p) => ({
+            ...p,
+            ingredients: p.ingredients.filter((_, index) => index !== i),
         }));
 
-    const updateIngredient = (index, field, value) =>
-        setValues((prev) => {
-            const updated = [...prev.ingredients];
-            updated[index][field] = value;
-            return { ...prev, ingredients: updated };
+    const updateIngredient = (i, field, value) =>
+        setValues((p) => {
+            const list = [...p.ingredients];
+            list[i][field] = value;
+            return { ...p, ingredients: list };
         });
 
     const addStep = () =>
-        setValues((prev) => ({
-            ...prev,
-            steps: [...prev.steps, { step: prev.steps.length + 1, text: "" }],
+        setValues((p) => ({
+            ...p,
+            steps: [...p.steps, { step: p.steps.length + 1, text: "" }],
         }));
 
-    const removeStep = (index) =>
-        setValues((prev) => ({
-            ...prev,
-            steps: prev.steps
-                .filter((_, i) => i !== index)
-                .map((s, i) => ({ ...s, step: i + 1 })),
+    const removeStep = (i) =>
+        setValues((p) => ({
+            ...p,
+            steps: p.steps
+                .filter((_, index) => index !== i)
+                .map((s, index) => ({ ...s, step: index + 1 })),
         }));
 
-    const updateStep = (index, value) =>
-        setValues((prev) => {
-            const updated = [...prev.steps];
-            updated[index].text = value;
-            return { ...prev, steps: updated };
+    const updateStep = (i, value) =>
+        setValues((p) => {
+            const list = [...p.steps];
+            list[i].text = value;
+            return { ...p, steps: list };
         });
 
-    const handleSubmit = (e) => {
+    const token = localStorage.getItem("token")
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(values);
+        // console.log(values);
+        try{
+            const res = await API.post('/foodapi/create-recipe/', values,
+                { headers: { Authorization: `Bearer ${token}` } }
+            )
+            if(res.data.success){
+                alert(res.data.message)
+                window.location.reload()
+            }
+            else{
+                alert(res.data.message)
+            }
+        }
+        catch(err){
+            alert(err)
+        }
     };
 
     return (
-        <div className="bg-gray-50 py-12">
-            <form onSubmit={handleSubmit} className="max-w-4xl mx-auto space-y-10 px-6">
-                <Section title="Recipe Slug">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-green-50 py-14">
+            <form
+                onSubmit={handleSubmit}
+                className="mx-auto w-full max-w px-6 space-y-16"
+            >
+                <header className="space-y-2">
+                    <h1 className="text-4xl font-bold text-gray-800">
+                        Create New Recipe
+                    </h1>
+                    <p className="text-gray-500">
+                        Add a Sri Lankan recipe with multilingual support.
+                    </p>
+                </header>
+
+                <Divider />
+
+                <Section title="Basic Information">
                     <ModernInput
+                        label="Recipe Slug"
                         name="slug"
                         value={values.slug}
                         onChange={handleChange}
-                        placeholder="recipe-slug"
+                        placeholder="chicken-curry-sri-lanka"
                     />
                 </Section>
 
                 <Section title="Recipe Name">
-                    <ModernInput
-                        name="name.en"
-                        value={values.name.en}
-                        onChange={handleChange}
-                        placeholder="English"
-                    />
-                    <ModernInput
-                        name="name.si"
-                        value={values.name.si}
-                        onChange={handleChange}
-                        placeholder="Sinhala"
-                    />
-                    <ModernInput
-                        name="name.ta"
-                        value={values.name.ta}
-                        onChange={handleChange}
-                        placeholder="Tamil"
-                    />
+                    <ThreeCol>
+                        <ModernInput label="English" name="name.en" value={values.name.en} onChange={handleChange} />
+                        <ModernInput label="Sinhala" name="name.si" value={values.name.si} onChange={handleChange} />
+                        <ModernInput label="Tamil" name="name.ta" value={values.name.ta} onChange={handleChange} />
+                    </ThreeCol>
                 </Section>
 
                 <Section title="Description">
-                    <ModernTextArea
-                        name="description.en"
-                        value={values.description.en}
-                        onChange={handleChange}
-                        placeholder="English"
-                    />
-                    <ModernTextArea
-                        name="description.si"
-                        value={values.description.si}
-                        onChange={handleChange}
-                        placeholder="Sinhala"
-                    />
-                    <ModernTextArea
-                        name="description.ta"
-                        value={values.description.ta}
-                        onChange={handleChange}
-                        placeholder="Tamil"
-                    />
+                    <ModernTextArea label="English" name="description.en" value={values.description.en} onChange={handleChange} />
+                    <ModernTextArea label="Sinhala" name="description.si" value={values.description.si} onChange={handleChange} />
+                    <ModernTextArea label="Tamil" name="description.ta" value={values.description.ta} onChange={handleChange} />
                 </Section>
 
                 <Section title="Origin">
-                    <div className="grid grid-cols-2 gap-4">
-                        <ModernInput name="origin.country" value={values.origin.country} onChange={handleChange} />
-                        <ModernInput name="origin.region" value={values.origin.region} onChange={handleChange} placeholder="Region" />
-                    </div>
+                    <TwoCol>
+                        <ModernInput label="Country" name="origin.country" value={values.origin.country} onChange={handleChange} />
+                        <ModernInput label="Region" name="origin.region" value={values.origin.region} onChange={handleChange} />
+                    </TwoCol>
                 </Section>
 
                 <Section title="Category">
-                    <ModernSelect name="category" value={values.category} onChange={handleChange} options={categoryOptions} />
+                    <ModernSelect
+                        label="Recipe Category"
+                        name="category"
+                        value={values.category}
+                        onChange={handleChange}
+                        options={categoryOptions}
+                    />
                 </Section>
 
                 <Section title="Ingredients">
-                    {values.ingredients.map((ing, i) => (
-                        <div key={i} className="grid grid-cols-3 gap-3 items-end">
-                            <ModernInput
-                                value={ing.name}
-                                onChange={(e) => updateIngredient(i, "name", e.target.value)}
-                                placeholder="Name"
-                            />
-                            <ModernInput
-                                value={ing.quantity}
-                                onChange={(e) => updateIngredient(i, "quantity", e.target.value)}
-                                placeholder="Quantity"
-                            />
-                            <Button label="Remove" color="#EF4444" onClick={() => removeIngredient(i)} />
-                        </div>
-                    ))}
-                    <Button label="+ Add Ingredient" color="#3B82F6" onClick={addIngredient} />
+                    <div className="space-y-4">
+                        {values.ingredients.map((ing, i) => (
+                            <div key={i} className="grid grid-cols-12 gap-4">
+                                <ModernInput
+                                    className="col-span-5"
+                                    placeholder="Ingredient"
+                                    value={ing.name}
+                                    onChange={(e) => updateIngredient(i, "name", e.target.value)}
+                                />
+                                <ModernInput
+                                    className="col-span-4"
+                                    placeholder="Quantity"
+                                    value={ing.quantity}
+                                    onChange={(e) => updateIngredient(i, "quantity", e.target.value)}
+                                />
+                                <Button
+                                    label="Remove"
+                                    color="#EF4444"
+                                    className="col-span-3"
+                                    onClick={() => removeIngredient(i)}
+                                />
+                            </div>
+                        ))}
+                        <Button label="+ Add Ingredient" color="#2563EB" onClick={addIngredient} />
+                    </div>
                 </Section>
 
-                <Section title="Steps">
-                    {values.steps.map((step, index) => (
-                        <div key={index} className="flex flex-col gap-3 hover:bg-gray-50 rounded-xl p-3 transition">
-                            <ModernTextArea
-                                value={step.text}
-                                onChange={(e) => updateStep(index, e.target.value)}
-                                placeholder={`Step ${step.step}`}
-                            />
-                            <div className="self-end">
-                                <Button label="Remove" color="#EF4444" onClick={() => removeStep(index)} />
+                <Section title="Cooking Steps">
+                    <div className="space-y-6">
+                        {values.steps.map((step, i) => (
+                            <div key={i} className="rounded-xl border border-gray-200 p-5 bg-white">
+                                <ModernTextArea
+                                    label={`Step ${step.step}`}
+                                    value={step.text}
+                                    onChange={(e) => updateStep(i, e.target.value)}
+                                />
+                                <div className="mt-3 text-right">
+                                    <Button label="Remove Step" color="#EF4444" onClick={() => removeStep(i)} />
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                    <Button label="+ Add Step" color="#3B82F6" onClick={addStep} />
+                        ))}
+                        <Button label="+ Add Step" color="#2563EB" onClick={addStep} />
+                    </div>
                 </Section>
 
                 <Section title="Cooking Time">
-                    <div className="grid grid-cols-2 gap-4">
-                        <ModernInput
-                            type="number"
-                            name="cookingTime.prepMinutes"
-                            value={values.cookingTime.prepMinutes}
-                            onChange={handleChange}
-                            placeholder="Prep Minutes"
-                        />
-                        <ModernInput
-                            type="number"
-                            name="cookingTime.cookMinutes"
-                            value={values.cookingTime.cookMinutes}
-                            onChange={handleChange}
-                            placeholder="Cook Minutes"
-                        />
-                    </div>
+                    <TwoCol>
+                        <ModernInput type="number" label="Prep Minutes" name="cookingTime.prepMinutes" value={values.cookingTime.prepMinutes} onChange={handleChange} />
+                        <ModernInput type="number" label="Cook Minutes" name="cookingTime.cookMinutes" value={values.cookingTime.cookMinutes} onChange={handleChange} />
+                    </TwoCol>
                 </Section>
 
                 <Section title="Spice Level">
-                    <ModernInput type="number" name="spiceLevel" value={values.spiceLevel} onChange={handleChange} placeholder="1-5" />
+                    <ModernInput type="number" label="Spice Level (1–5)" name="spiceLevel" value={values.spiceLevel} onChange={handleChange} />
                 </Section>
 
                 <Section title="Nutrition">
-                    <div className="grid grid-cols-2 gap-4">
-                        <ModernInput type="number" name="nutrition.calories" value={values.nutrition.calories} onChange={handleChange} placeholder="Calories" />
-                        <ModernInput type="number" name="nutrition.protein" value={values.nutrition.protein} onChange={handleChange} placeholder="Protein" />
-                        <ModernInput type="number" name="nutrition.carbs" value={values.nutrition.carbs} onChange={handleChange} placeholder="Carbs" />
-                        <ModernInput type="number" name="nutrition.fat" value={values.nutrition.fat} onChange={handleChange} placeholder="Fat" />
-                    </div>
+                    <TwoCol>
+                        <ModernInput type="number" label="Calories" name="nutrition.calories" value={values.nutrition.calories} onChange={handleChange} />
+                        <ModernInput type="number" label="Protein (g)" name="nutrition.protein" value={values.nutrition.protein} onChange={handleChange} />
+                        <ModernInput type="number" label="Carbs (g)" name="nutrition.carbs" value={values.nutrition.carbs} onChange={handleChange} />
+                        <ModernInput type="number" label="Fat (g)" name="nutrition.fat" value={values.nutrition.fat} onChange={handleChange} />
+                    </TwoCol>
                 </Section>
 
-                <Button label="Create Recipe" color="#10B981" type="submit" className="w-full py-4 text-lg font-semibold" />
+                <Divider />
+
+                <Button
+                    label="🚀 Publish Recipe"
+                    color="#10B981"
+                    type="submit"
+                    className="w-full py-5 text-xl font-bold rounded-2xl"
+                />
             </form>
         </div>
     );
 };
 
 const Section = ({ title, children }) => (
-    <div className="bg-white rounded-3xl shadow-lg p-8 hover:shadow-2xl transition duration-300 space-y-4">
-        <h2 className="font-semibold text-2xl text-gray-700">{title}</h2>
-        {children}
-    </div>
+    <section className="space-y-6">
+        <h2 className="text-2xl font-semibold text-gray-800">{title}</h2>
+        <div className="space-y-4">{children}</div>
+    </section>
 );
 
-// Modern input with floating effect
-const ModernInput = ({ type = "text", ...props }) => (
-    <div className="relative w-full">
+const Divider = () => (
+    <div className="h-px w-full bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+);
+
+const TwoCol = ({ children }) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">{children}</div>
+);
+
+const ThreeCol = ({ children }) => (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">{children}</div>
+);
+
+const ModernInput = ({ label, className = "", ...props }) => (
+    <div className={`flex flex-col gap-1 ${className}`}>
+        {label && <label className="text-sm font-medium text-gray-600">{label}</label>}
         <input
-            type={type}
             {...props}
-            className="peer w-full px-4 py-3 rounded-2xl bg-gray-100 focus:bg-white focus:ring-2 focus:ring-green-400 focus:outline-none transition"
+            className="rounded-xl border border-gray-300 bg-white px-4 py-3 focus:border-green-500 focus:ring-2 focus:ring-green-200 outline-none transition"
         />
-        {props.placeholder && (
-            <label className="absolute left-4 top-3 text-gray-400 text-sm peer-focus:top-[-8px] peer-focus:text-green-400 peer-focus:text-xs transition-all pointer-events-none">
-                {props.placeholder}
-            </label>
-        )}
     </div>
 );
 
-const ModernTextArea = ({ ...props }) => (
-    <div className="relative w-full">
+const ModernTextArea = ({ label, ...props }) => (
+    <div className="flex flex-col gap-1">
+        {label && <label className="text-sm font-medium text-gray-600">{label}</label>}
         <textarea
             {...props}
-            className="peer w-full px-4 py-3 rounded-2xl bg-gray-100 focus:bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none transition min-h-[120px]"
+            className="rounded-xl border border-gray-300 bg-white px-4 py-3 min-h-[120px] focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition"
         />
-        {props.placeholder && (
-            <label className="absolute left-4 top-3 text-gray-400 text-sm peer-focus:top-[-8px] peer-focus:text-blue-400 peer-focus:text-xs transition-all pointer-events-none">
-                {props.placeholder}
-            </label>
-        )}
     </div>
 );
 
-const ModernSelect = ({ options, ...props }) => (
-    <div className="relative w-full">
+const ModernSelect = ({ label, options, ...props }) => (
+    <div className="flex flex-col gap-1">
+        {label && <label className="text-sm font-medium text-gray-600">{label}</label>}
         <select
             {...props}
-            className="peer w-full px-4 py-3 rounded-2xl bg-gray-100 focus:bg-white focus:ring-2 focus:ring-purple-400 focus:outline-none transition appearance-none"
+            className="rounded-xl border border-gray-300 bg-white px-4 py-3 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 outline-none transition"
         >
-            <option value="">Select an option</option>
+            <option value="">Select</option>
             {options.map((o) => (
                 <option key={o.value} value={o.value}>
                     {o.label}
