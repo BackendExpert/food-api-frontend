@@ -10,6 +10,7 @@ import PrivateRoute from '../router/PrivateRoute'
 import Unauthorized from './Unauthorized'
 import Dashboard from '../layouts/Dashboard'
 import DashError from '../component/Error/DashError'
+import CreateRecipe from '../pages/Dashboard/Foods/CreateRecipe'
 
 function App() {
     return (
@@ -26,6 +27,9 @@ function App() {
                 <Route path='/dashboard' element={<PrivateRoute roles={['admin', 'developer', 'user']}><Dashboard /></PrivateRoute>}>
                     <Route path='*' element={<PrivateRoute roles={['admin', 'developer', 'user']}><DashError /></PrivateRoute>} />
                     <Route index element={<PrivateRoute roles={['admin', 'developer', 'user']}><DashHome /></PrivateRoute>} />
+
+                    <Route path='food/create' element={<PrivateRoute roles={['admin', 'developer', 'user']}><CreateRecipe /></PrivateRoute>}  />
+                
                 </Route>
 
             </Routes>
